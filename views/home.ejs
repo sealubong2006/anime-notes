@@ -1,0 +1,77 @@
+<%- include('partials/header') %>
+
+<div class="hero-banner mb-4">
+    <h1 class="hero-title">Anime Notes</h1>
+    <p class="hero-subtitle">My personal anime review journal — where I track what I've watched, rate it my way, and never forget what I thought of it.</p>
+    <div class="hero-actions">
+        <a href="/anime" class="btn btn-light btn-lg">Browse Library</a>
+        <a href="/anime/add" class="btn btn-outline-light btn-lg">Add Anime</a>
+    </div>
+</div>
+
+<% if (stats.total === 0) { %>
+    <p class="text-muted">No anime added yet — <a href="/anime/add">add your first one</a>.</p>
+<% } else { %>
+    <div class="row row-cols-2 row-cols-md-2 g-3 mb-4">
+        <div class="col">
+            <div class="stat-tile">
+                <div class="stat-tile-value"><%= stats.total %></div>
+                <div class="stat-tile-label">In your library</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="stat-tile">
+                <div class="stat-tile-value"><%= stats.watched %></div>
+                <div class="stat-tile-label">Watched</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="mb-4">
+        <h2 class="h4 mb-3">Recently Added</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+            <% recentAnime.forEach((anime) => { %>
+                <%- include('partials/anime-card', { anime }) %>
+            <% }) %>
+        </div>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 mb-3">Recently Watched</h2>
+        <% if (recentlyWatched.length === 0) { %>
+            <p class="text-muted">You haven't marked anything as watched yet — set a watch date from an anime's edit page.</p>
+        <% } else { %>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+                <% recentlyWatched.forEach((anime) => { %>
+                    <%- include('partials/anime-card', { anime }) %>
+                <% }) %>
+            </div>
+        <% } %>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 mb-3">Top Rated</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-4">
+            <% topRated.forEach((anime) => { %>
+                <%- include('partials/anime-card', { anime }) %>
+            <% }) %>
+        </div>
+    </section>
+
+    <section class="mb-4">
+        <h2 class="h4 mb-3">Top Genres</h2>
+        <% if (topGenres.length === 0) { %>
+            <p class="text-muted">No genre data yet.</p>
+        <% } else { %>
+            <p>
+                <% topGenres.forEach((genre) => { %>
+                    <span class="badge genre-badge">
+                        <%= genre.name %> · <%= genre.animeCount %>
+                    </span>
+                <% }) %>
+            </p>
+        <% } %>
+    </section>
+<% } %>
+
+<%- include('partials/footer') %>

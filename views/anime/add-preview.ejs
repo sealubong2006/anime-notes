@@ -1,0 +1,72 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+    <h1>Confirm Add</h1>
+    <p class="text-muted">Review the details below before adding this anime to your library.</p>
+</div>
+
+<% if (error) { %>
+    <div class="alert alert-warning"><%= error %></div>
+    <a href="/anime/add" class="btn btn-outline-secondary">Back to search</a>
+<% } else { %>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <% if (anime.coverImageUrl) { %>
+                <div class="cover-frame rounded">
+                    <img src="<%= anime.coverImageUrl %>" alt="<%= anime.titleEnglish || anime.titleRomaji %> cover">
+                </div>
+            <% } else { %>
+                <div class="detail-cover-placeholder rounded">No cover available</div>
+            <% } %>
+        </div>
+
+        <div class="col-md-8 d-flex flex-column justify-content-center">
+            <h2 class="detail-title mb-1"><%= anime.titleEnglish || anime.titleRomaji || "Untitled" %></h2>
+            <% if (anime.titleNative || (anime.titleRomaji && anime.titleRomaji !== anime.titleEnglish)) { %>
+                <p class="detail-subtitle text-muted mb-3">
+                    <%= anime.titleNative %><% if (anime.titleNative && anime.titleRomaji && anime.titleRomaji !== anime.titleEnglish) { %> · <% } %><% if (anime.titleRomaji && anime.titleRomaji !== anime.titleEnglish) { %><%= anime.titleRomaji %><% } %>
+                </p>
+            <% } %>
+
+            <% if (anime.format || anime.episodeCount || anime.seasonYear) { %>
+                <div class="info-chip-row">
+                    <% if (anime.format) { %>
+                        <span class="info-chip"><span class="info-chip-label">Format</span><%= anime.format %></span>
+                    <% } %>
+                    <% if (anime.episodeCount) { %>
+                        <span class="info-chip"><span class="info-chip-label">Episodes</span><%= anime.episodeCount %></span>
+                    <% } %>
+                    <% if (anime.seasonYear) { %>
+                        <% const seasonLabel = anime.season ? anime.season.charAt(0) + anime.season.slice(1).toLowerCase() + " " : ""; %>
+                        <span class="info-chip"><span class="info-chip-label">Season</span><%= seasonLabel %><%= anime.seasonYear %></span>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <section class="detail-section detail-section-anime mb-4">
+        <p class="section-eyebrow mb-1">AniList</p>
+        <h2 class="detail-section-heading">About this anime</h2>
+
+        <% if (anime.genres && anime.genres.length > 0) { %>
+            <p class="mb-3">
+                <% anime.genres.forEach((genre) => { %>
+                    <span class="badge genre-badge"><%= genre %></span>
+                <% }) %>
+            </p>
+        <% } %>
+
+        <p class="detail-description mb-0"><%= anime.description || "No synopsis available." %></p>
+    </section>
+
+    <div class="d-flex gap-2">
+        <form method="POST" action="/anime">
+            <input type="hidden" name="anilistId" value="<%= anime.anilistId %>">
+            <button type="submit" class="btn btn-primary">Confirm Add to Library</button>
+        </form>
+        <a href="/anime/add" class="btn btn-outline-secondary">Back to search</a>
+    </div>
+<% } %>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,23 @@
+<div class="col">
+    <a href="/anime/<%= anime.id %>" class="text-decoration-none">
+        <div class="card anime-card h-100">
+            <div class="cover-frame">
+                <% if (anime.coverImageUrl) { %>
+                    <img src="<%= anime.coverImageUrl %>" alt="<%= anime.titleEnglish %> cover" loading="lazy">
+                <% } %>
+                <span class="badge rating-badge">★ <%= anime.overallRating %>/10</span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><%= anime.titleEnglish || anime.titleRomaji || "Untitled" %></h5>
+                <% if (anime.genres && anime.genres.length > 0) { %>
+                    <p class="mb-2">
+                        <% anime.genres.slice(0, 3).forEach((genre) => { %>
+                            <span class="badge genre-badge"><%= genre %></span>
+                        <% }) %>
+                    </p>
+                <% } %>
+                <p class="card-text anime-card-summary"><%= (anime.comment && anime.comment.trim() !== "") ? anime.comment : anime.description %></p>
+            </div>
+        </div>
+    </a>
+</div>

@@ -1,0 +1,59 @@
+<%- include('../partials/header') %>
+
+<% if (!anime) { %>
+    <p class="text-muted">Anime not found.</p>
+<% } else { %>
+    <div class="mb-4">
+        <h1 class="mb-1">Edit Review</h1>
+        <p class="text-muted"><%= anime.titleEnglish %></p>
+    </div>
+
+    <% if (typeof errors !== "undefined" && errors && errors.length > 0) { %>
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                <% errors.forEach((error) => { %>
+                    <li><%= error %></li>
+                <% }) %>
+            </ul>
+        </div>
+    <% } %>
+
+    <div class="detail-section detail-section-review col-md-7">
+        <p class="text-muted small mb-3">This is your own information — separate from AniList's data — so it's never overwritten if the anime's details are ever refreshed.</p>
+
+        <form method="POST" action="/anime/<%= anime.id %>/edit">
+            <div class="mb-3">
+                <span class="form-label d-block">Rating (1–10)</span>
+                <div class="rating-picker" role="radiogroup" aria-label="Overall rating">
+                    <% for (let i = 1; i <= 10; i++) { %>
+                        <input
+                            type="radio"
+                            class="rating-picker-input"
+                            name="overallRating"
+                            id="rating<%= i %>"
+                            value="<%= i %>"
+                            <%= Number(anime.overallRating) === i ? "checked" : "" %>
+                        >
+                        <label class="rating-picker-label" for="rating<%= i %>"><%= i %></label>
+                    <% } %>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="comment">Comment</label>
+                <textarea class="form-control" id="comment" name="comment" rows="5"><%= anime.comment %></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="dateWatched">Date watched</label>
+                <div class="d-flex gap-2">
+                    <input type="date" class="form-control" id="dateWatched" name="dateWatched" value="<%= anime.dateWatched || '' %>">
+                    <button type="submit" name="action" value="clearDateWatched" class="btn btn-outline-secondary text-nowrap">Clear</button>
+                </div>
+                <div class="form-text">Leave blank if you haven't watched it yet, or use Clear to remove a recorded date.</div>
+            </div>
+            <button type="submit" name="action" value="save" class="btn btn-primary">Save review</button>
+            <a href="/anime/<%= anime.id %>" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+    </div>
+<% } %>
+
+<%- include('../partials/footer') %>

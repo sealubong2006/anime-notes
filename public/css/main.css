@@ -1,0 +1,452 @@
+:root {
+    --accent: #6c5ce7;
+    --accent-dark: #4834a3;
+    --accent-warm: #ff6b9d;
+    --accent-tint: #efeafb;
+    --accent-tint-border: #d9d0f7;
+    --surface: #ffffff;
+    --surface-muted: #f5f4fb;
+    --cover-placeholder: #e5e3f5;
+    --text-muted: #6c6c6c;
+    --heading-accent: var(--accent-dark);
+    --footer-border: rgba(0, 0, 0, 0.06);
+}
+
+/* Dark mode: Bootstrap 5.3's [data-bs-theme="dark"] already re-themes every
+   Bootstrap component (body text/bg, cards, forms, navbar, pagination, etc.)
+   automatically. We only need to override our own custom variables — every
+   custom class below reads colors through these variables rather than
+   hardcoding hex values, so this single block re-themes the whole app. */
+[data-bs-theme="dark"] {
+    --accent-warm: #ff8fb3;
+    --accent-tint: #2a2440;
+    --accent-tint-border: #443a66;
+    --surface: #1e1b29;
+    --surface-muted: #14121c;
+    --cover-placeholder: #2a2440;
+    --text-muted: #a9a3b8;
+    --heading-accent: #b9a6ff;
+    --footer-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    background-color: var(--surface-muted);
+    background-image:
+        radial-gradient(circle at 8% 12%, rgba(108, 92, 231, 0.12), transparent 40%),
+        radial-gradient(circle at 92% 18%, rgba(255, 107, 157, 0.14), transparent 42%),
+        radial-gradient(circle at 15% 85%, rgba(255, 183, 3, 0.10), transparent 40%),
+        radial-gradient(circle at 88% 90%, rgba(72, 52, 163, 0.10), transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    transition: background-color 0.2s ease;
+}
+
+[data-bs-theme="dark"] body {
+    background-image:
+        radial-gradient(circle at 8% 12%, rgba(108, 92, 231, 0.22), transparent 40%),
+        radial-gradient(circle at 92% 18%, rgba(255, 107, 157, 0.20), transparent 42%),
+        radial-gradient(circle at 15% 85%, rgba(255, 183, 3, 0.14), transparent 40%),
+        radial-gradient(circle at 88% 90%, rgba(108, 92, 231, 0.18), transparent 45%);
+}
+
+.theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border-radius: 50%;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.1rem;
+    line-height: 1;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    transform: rotate(15deg);
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-transition {
+    animation: fadeSlideIn 0.35s ease-out both;
+}
+
+.app-navbar {
+    background: linear-gradient(120deg, var(--accent-dark), var(--accent));
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.app-navbar .navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.02rem;
+}
+
+.app-navbar .nav-link {
+    position: relative;
+    font-weight: 500;
+    transition: color 0.15s ease;
+}
+
+.app-navbar .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #fff, var(--accent-warm));
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.app-navbar .nav-link:hover::after,
+.app-navbar .nav-link:focus-visible::after {
+    transform: scaleX(1);
+}
+
+.app-footer {
+    color: var(--text-muted);
+    border-top: 1px solid var(--footer-border);
+    margin-top: 2rem;
+}
+
+.btn {
+    transition: transform 0.1s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Home hero */
+.hero-banner {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent) 55%, var(--accent-warm));
+    color: #fff;
+    padding: 3rem 2rem;
+    border-radius: 1rem;
+}
+
+.hero-banner::before,
+.hero-banner::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(50px);
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.hero-banner::before {
+    width: 220px;
+    height: 220px;
+    background: #ffffff;
+    top: -70px;
+    right: -50px;
+}
+
+.hero-banner::after {
+    width: 180px;
+    height: 180px;
+    background: var(--accent-warm);
+    bottom: -60px;
+    left: 15%;
+}
+
+.hero-title {
+    position: relative;
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.hero-subtitle {
+    position: relative;
+    font-size: 1.05rem;
+    max-width: 38rem;
+    opacity: 0.92;
+}
+
+.hero-actions {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.form-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Shared cover-image treatment for anime cards and AniList search-result cards */
+.cover-frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    background-color: var(--cover-placeholder);
+}
+
+.cover-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.anime-card {
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.anime-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(108, 92, 231, 0.25);
+}
+
+.candidate-card {
+    border: none;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.rating-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(120deg, var(--accent), var(--accent-warm));
+    color: #fff;
+}
+
+.anime-card-summary {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.genre-badge {
+    background-color: var(--accent);
+    color: #fff;
+    margin-right: 0.35rem;
+}
+
+.filter-bar {
+    background-color: var(--surface);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.candidate-subtitle,
+.candidate-meta {
+    font-size: 0.85rem;
+}
+
+/* Anime detail page */
+.detail-cover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border-radius: 0.75rem;
+    width: 100%;
+}
+
+.detail-title {
+    font-weight: 700;
+}
+
+.section-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08rem;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.info-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.info-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background-color: var(--surface);
+    border: 1px solid var(--accent-tint-border);
+    border-radius: 2rem;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--heading-accent);
+}
+
+.info-chip-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03rem;
+    color: var(--text-muted);
+}
+
+.detail-cover-placeholder {
+    aspect-ratio: 3 / 4;
+    background-color: var(--cover-placeholder);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+.detail-subtitle {
+    font-size: 1rem;
+}
+
+.detail-section {
+    padding: 1.25rem 1.5rem;
+    border-radius: 0.75rem;
+}
+
+.detail-section-anime {
+    background-color: var(--surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.detail-section-review {
+    background-color: var(--accent-tint);
+    border: 1px solid var(--accent-tint-border);
+}
+
+.detail-section-heading {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--heading-accent);
+    margin-bottom: 0.75rem;
+}
+
+.detail-description {
+    white-space: pre-line;
+}
+
+.rating-stars {
+    color: var(--accent);
+    font-size: 1.25rem;
+    letter-spacing: 0.1rem;
+}
+
+.rating-number {
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.watched-badge {
+    background-color: #2e7d32;
+    color: #fff;
+}
+
+.unwatched-badge {
+    background-color: #9e9e9e;
+    color: #fff;
+}
+
+/* Accessible rating picker: real radio inputs, visually hidden but still
+   focusable/keyboard-operable, styled via their sibling label. */
+.rating-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.rating-picker-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+}
+
+.rating-picker-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    background-color: var(--surface);
+    border: 1px solid var(--accent-tint-border);
+    color: var(--heading-accent);
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.rating-picker-input:checked + .rating-picker-label {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.rating-picker-input:focus-visible + .rating-picker-label {
+    outline: 2px solid var(--heading-accent);
+    outline-offset: 2px;
+}
+
+/* Home dashboard stat tiles */
+.stat-tile {
+    background-color: var(--surface);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    border-bottom: 3px solid var(--accent-warm);
+    transition: transform 0.15s ease;
+}
+
+.stat-tile:hover {
+    transform: translateY(-2px);
+}
+
+.stat-tile-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--heading-accent);
+}
+
+.stat-tile-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.pagination .page-link {
+    color: var(--heading-accent);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}

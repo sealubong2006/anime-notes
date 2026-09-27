@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+    <h1>Browse Anime</h1>
+    <p class="text-muted">Search and filter your collection.</p>
+</div>
+
+<form class="row g-3 align-items-end mb-4 filter-bar" method="GET" action="/anime">
+    <div class="col-md-4">
+        <label class="form-label" for="search">Search</label>
+        <input type="text" class="form-control" id="search" name="search" placeholder="Title..." value="<%= filters.search %>">
+    </div>
+    <div class="col-md-3">
+        <label class="form-label" for="genre">Genre</label>
+        <select class="form-select" id="genre" name="genre">
+            <option value="">All genres</option>
+            <% genreOptions.forEach((genre) => { %>
+                <option value="<%= genre.id %>"<% if (filters.genreId === genre.id) { %> selected<% } %>><%= genre.name %></option>
+            <% }) %>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label" for="minRating">Min rating</label>
+        <select class="form-select" id="minRating" name="minRating">
+            <option value="">Any</option>
+            <% for (let i = 1; i <= 10; i++) { %>
+                <option value="<%= i %>"<% if (filters.minRating === i) { %> selected<% } %>><%= i %>+</option>
+            <% } %>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label" for="sort">Sort by</label>
+        <select class="form-select" id="sort" name="sort">
+            <option value="recent"<% if (filters.sort === "recent") { %> selected<% } %>>Recently added</option>
+            <option value="rating"<% if (filters.sort === "rating") { %> selected<% } %>>Rating</option>
+            <option value="title"<% if (filters.sort === "title") { %> selected<% } %>>Title</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Go</button>
+    </div>
+</form>
+
+<% const hasActiveFilters = filters.search || filters.genreId !== null || filters.minRating !== null || filters.sort !== "recent"; %>
+<% if (hasActiveFilters) { %>
+    <p class="mb-3"><a href="/anime" class="link-secondary">Clear all filters</a></p>
+<% } %>
+
+<% if (animeList.length === 0) { %>
+    <p class="text-muted">No anime match these filters.<% if (hasActiveFilters) { %> <a href="/anime">Clear filters</a> to see your full library.<% } %></p>
+<% } else { %>
+    <p class="text-muted small mb-3">
+        Page <%= pagination.page %> of <%= pagination.totalPages %> · <%= pagination.totalCount %> anime
+    </p>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <% animeList.forEach((anime) => { %>
+            <%- include('../partials/anime-card', { anime }) %>
+        <% }) %>
+    </div>
+
+    <% if (pagination.totalPages > 1) { %>
+        <%
+            function buildPageUrl(pageNumber) {
+                const params = new URLSearchParams();
+                if (filters.search) params.set("search", filters.search);
+                if (filters.genreId !== null) params.set("genre", filters.genreId);
+                if (filters.minRating !== null) params.set("minRating", filters.minRating);
+                if (filters.sort !== "recent") params.set("sort", filters.sort);
+                params.set("page", pageNumber);
+                return "/anime?" + params.toString();
+            }
+
+            const windowSize = 5;
+            let startPage = Math.max(1, pagination.page - Math.floor(windowSize / 2));
+            let endPage = Math.min(pagination.totalPages, startPage + windowSize - 1);
+            startPage = Math.max(1, endPage - windowSize + 1);
+            const isFirstPage = pagination.page <= 1;
+            const isLastPage = pagination.page >= pagination.totalPages;
+        %>
+        <nav aria-label="Browse pagination" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item <%= isFirstPage ? "disabled" : "" %>">
+                    <a class="page-link" href="<%= isFirstPage ? "#" : buildPageUrl(pagination.page - 1) %>" aria-disabled="<%= isFirstPage %>">Previous</a>
+                </li>
+                <% for (let p = startPage; p <= endPage; p++) { %>
+                    <li class="page-item <%= p === pagination.page ? "active" : "" %>">
+                        <a class="page-link" href="<%= buildPageUrl(p) %>"><%= p %></a>
+                    </li>
+                <% } %>
+                <li class="page-item <%= isLastPage ? "disabled" : "" %>">
+                    <a class="page-link" href="<%= isLastPage ? "#" : buildPageUrl(pagination.page + 1) %>" aria-disabled="<%= isLastPage %>">Next</a>
+                </li>
+            </ul>
+        </nav>
+    <% } %>
+<% } %>
+
+<%- include('../partials/footer') %>

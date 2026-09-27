@@ -1,0 +1,99 @@
+<%- include('../partials/header') %>
+
+<% if (!anime) { %>
+    <p class="text-muted">Anime not found.</p>
+<% } else { %>
+    <% if (typeof alreadyAdded !== "undefined" && alreadyAdded) { %>
+        <div class="alert alert-info">This anime is already in your library.</div>
+    <% } %>
+
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <% if (anime.coverImageUrl) { %>
+                <img src="<%= anime.coverImageUrl %>" alt="<%= anime.titleEnglish || anime.titleRomaji %> cover" class="img-fluid rounded detail-cover">
+            <% } else { %>
+                <div class="detail-cover-placeholder rounded">No cover available</div>
+            <% } %>
+        </div>
+
+        <div class="col-md-8 d-flex flex-column justify-content-center">
+            <h1 class="detail-title mb-1"><%= anime.titleEnglish || anime.titleRomaji || "Untitled" %></h1>
+            <% if (anime.titleNative || (anime.titleRomaji && anime.titleRomaji !== anime.titleEnglish)) { %>
+                <p class="detail-subtitle text-muted mb-3">
+                    <%= anime.titleNative %><% if (anime.titleNative && anime.titleRomaji && anime.titleRomaji !== anime.titleEnglish) { %> · <% } %><% if (anime.titleRomaji && anime.titleRomaji !== anime.titleEnglish) { %><%= anime.titleRomaji %><% } %>
+                </p>
+            <% } %>
+
+            <% if (anime.format || anime.episodeCount || anime.seasonYear) { %>
+                <div class="info-chip-row">
+                    <% if (anime.format) { %>
+                        <span class="info-chip"><span class="info-chip-label">Format</span><%= anime.format %></span>
+                    <% } %>
+                    <% if (anime.episodeCount) { %>
+                        <span class="info-chip"><span class="info-chip-label">Episodes</span><%= anime.episodeCount %></span>
+                    <% } %>
+                    <% if (anime.seasonYear) { %>
+                        <% const seasonLabel = anime.season ? anime.season.charAt(0) + anime.season.slice(1).toLowerCase() + " " : ""; %>
+                        <span class="info-chip"><span class="info-chip-label">Season</span><%= seasonLabel %><%= anime.seasonYear %></span>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <section class="detail-section detail-section-anime mb-3">
+        <p class="section-eyebrow mb-1">AniList</p>
+        <h2 class="detail-section-heading">About this anime</h2>
+
+        <% if (anime.genres && anime.genres.length > 0) { %>
+            <p class="mb-3">
+                <% anime.genres.forEach((genre) => { %>
+                    <span class="badge genre-badge"><%= genre %></span>
+                <% }) %>
+            </p>
+        <% } %>
+
+        <p class="detail-description mb-0"><%= anime.description || "No synopsis available." %></p>
+    </section>
+
+    <section class="detail-section detail-section-review">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+                <p class="section-eyebrow mb-1">Your review</p>
+                <h2 class="detail-section-heading mb-0">My Review</h2>
+            </div>
+            <a href="/anime/<%= anime.id %>/edit" class="btn btn-primary btn-sm">Edit review</a>
+        </div>
+
+        <p class="detail-rating mb-3">
+            <% const filledStars = Math.round(anime.overallRating / 2); %>
+            <span class="rating-stars">
+                <% for (let i = 1; i <= 5; i++) { %><%= i <= filledStars ? "★" : "☆" %><% } %>
+            </span>
+            <span class="rating-number"><%= anime.overallRating %>/10</span>
+            <% if (anime.dateWatched) { %>
+                <span class="badge watched-badge ms-2">Watched</span>
+            <% } else { %>
+                <span class="badge unwatched-badge ms-2">Not watched yet</span>
+            <% } %>
+        </p>
+
+        <p class="mb-3">
+            <% if (anime.comment && anime.comment.trim() !== "") { %>
+                <%= anime.comment %>
+            <% } else { %>
+                <span class="text-muted fst-italic">No comment yet — edit your review to add one.</span>
+            <% } %>
+        </p>
+
+        <div class="info-chip-row mb-0">
+            <span class="info-chip"><span class="info-chip-label">Date added</span><%= anime.dateAdded %></span>
+            <span class="info-chip">
+                <span class="info-chip-label">Date watched</span>
+                <% if (anime.dateWatched) { %><%= anime.dateWatched %><% } else { %><span class="text-muted">Not watched yet</span><% } %>
+            </span>
+        </div>
+    </section>
+<% } %>
+
+<%- include('../partials/footer') %>

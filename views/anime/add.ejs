@@ -1,0 +1,64 @@
+<%- include('../partials/header') %>
+
+<div class="mb-4">
+    <h1>Add Anime</h1>
+    <p class="text-muted">Search AniList to find an anime to add to your library.</p>
+</div>
+
+<form class="row g-3 mb-4" method="GET" action="/anime/add/search">
+    <div class="col-md-8">
+        <label class="form-label" for="q">Anime title</label>
+        <input type="text" class="form-control" id="q" name="q" placeholder="e.g. Frieren" value="<%= query %>">
+    </div>
+    <div class="col-md-2 align-self-end">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<% if (error) { %>
+    <div class="alert alert-warning"><%= error %></div>
+<% } %>
+
+<% if (results !== null) { %>
+    <% if (results.length === 0) { %>
+        <p class="text-muted">No results found for "<%= query %>".</p>
+    <% } else { %>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            <% results.forEach((result) => { %>
+                <div class="col">
+                    <div class="card candidate-card h-100">
+                        <div class="cover-frame">
+                            <% if (result.coverImageUrl) { %>
+                                <img src="<%= result.coverImageUrl %>" alt="<%= result.titleEnglish || result.titleRomaji %> cover" loading="lazy">
+                            <% } %>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= result.titleEnglish || result.titleRomaji %></h5>
+                            <% if (result.titleNative || result.titleRomaji) { %>
+                                <p class="candidate-subtitle text-muted mb-2">
+                                    <%= result.titleNative %><% if (result.titleNative && result.titleRomaji) { %> · <% } %><%= result.titleRomaji %>
+                                </p>
+                            <% } %>
+                            <p class="candidate-meta text-muted mb-2">
+                                <%= result.format || "Unknown format" %>
+                                <% if (result.episodeCount) { %> · <%= result.episodeCount %> episodes<% } %>
+                                <% if (result.seasonYear) { %> · <%= result.season ? result.season + " " : "" %><%= result.seasonYear %><% } %>
+                            </p>
+                            <% if (result.genres && result.genres.length > 0) { %>
+                                <p class="mb-3">
+                                    <% result.genres.forEach((genre) => { %>
+                                        <span class="badge genre-badge"><%= genre %></span>
+                                    <% }) %>
+                                </p>
+                            <% } %>
+
+                            <a href="/anime/add/preview?anilistId=<%= result.anilistId %>" class="btn btn-outline-primary w-100">Select</a>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } %>
+<% } %>
+
+<%- include('../partials/footer') %>

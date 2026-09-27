@@ -1,20 +1,11 @@
 import express from "express";
-import bodyParser from "body-parser";
 import "dotenv/config";
-import pg from "pg";
+import homeRouter from "./routes/home.js";
+import animeRouter from "./routes/anime.js";
+import db from "./db/pool.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-const { Pool } = pg;
-
-const db = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-});
 
 db.connect()
     .then((client) => {
@@ -25,6 +16,15 @@ db.connect()
         console.error("Database connection error:", err);
     });
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+app.use("/", homeRouter);
+app.use("/anime", animeRouter);
+
+app.listen(port, () => {
+    console.log(`Anime Notes listening on port ${port}`);
+});
 
