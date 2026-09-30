@@ -1,6 +1,7 @@
 # Anime Notes
 
 A personal anime review journal. Search for anime via [AniList](https://anilist.co), add them to your own library, and keep track of your own rating, comments and watch date — kept separate from AniList's own data so it's never overwritten.
+[Demo](https://anime-notes.onrender.com) for Site Demo
 
 ## Tech stack
 
