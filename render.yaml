@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: anime-notes
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Points at an external Supabase PostgreSQL database rather than a
+      # Render-managed one — Render only hosts the web service.
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false

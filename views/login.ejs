@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+
+<div class="detail-section detail-section-review col-md-5 mx-auto">
+    <h1 class="mb-3 text-center">Login</h1>
+
+    <% if (error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <form method="POST" action="/login">
+        <div class="mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required autofocus>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Log in</button>
+    </form>
+</div>
+
+<%- include('partials/footer') %>

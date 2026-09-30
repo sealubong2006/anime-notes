@@ -5,12 +5,14 @@
     <p class="hero-subtitle">My personal anime review journal — where I track what I've watched, rate it my way, and never forget what I thought of it.</p>
     <div class="hero-actions">
         <a href="/anime" class="btn btn-light btn-lg">Browse Library</a>
-        <a href="/anime/add" class="btn btn-outline-light btn-lg">Add Anime</a>
+        <% if (isAdmin) { %>
+            <a href="/anime/add" class="btn btn-outline-light btn-lg">Add Anime</a>
+        <% } %>
     </div>
 </div>
 
 <% if (stats.total === 0) { %>
-    <p class="text-muted">No anime added yet — <a href="/anime/add">add your first one</a>.</p>
+    <p class="text-muted">No anime added yet<% if (isAdmin) { %> — <a href="/anime/add">add your first one</a><% } %>.</p>
 <% } else { %>
     <div class="row row-cols-2 row-cols-md-2 g-3 mb-4">
         <div class="col">

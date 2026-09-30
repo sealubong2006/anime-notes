@@ -62,7 +62,9 @@
                 <p class="section-eyebrow mb-1">Your review</p>
                 <h2 class="detail-section-heading mb-0">My Review</h2>
             </div>
-            <a href="/anime/<%= anime.id %>/edit" class="btn btn-primary btn-sm">Edit review</a>
+            <% if (isAdmin) { %>
+                <a href="/anime/<%= anime.id %>/edit" class="btn btn-primary btn-sm">Edit review</a>
+            <% } %>
         </div>
 
         <p class="detail-rating mb-3">

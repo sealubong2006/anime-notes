@@ -9,6 +9,7 @@ import {
     insertAnimeFromAniList
 } from "../db/queries/anime.js";
 import { searchAnime, getAnimeByAnilistId } from "../services/anilistService.js";
+import requireAdmin from "../middleware/requireAdmin.js";
 
 // Capped at 18 digits so an oversized numeric string can never be sent to
 // Postgres as a BIGINT literal (max ~9.2e18, 19 digits) — without this, an
@@ -75,11 +76,11 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.get("/add", (req, res) => {
+router.get("/add", requireAdmin, (req, res) => {
     res.render("anime/add", { title: "Add Anime", query: "", results: null, error: null });
 });
 
-router.get("/add/search", async (req, res) => {
+router.get("/add/search", requireAdmin, async (req, res) => {
     const query = typeof req.query.q === "string" ? req.query.q.trim() : "";
 
     if (query === "") {
@@ -105,7 +106,7 @@ router.get("/add/search", async (req, res) => {
     }
 });
 
-router.get("/add/preview", async (req, res, next) => {
+router.get("/add/preview", requireAdmin, async (req, res, next) => {
     const anilistId = toNullableInt(req.query.anilistId);
 
     if (anilistId === null) {
@@ -149,7 +150,7 @@ router.get("/add/preview", async (req, res, next) => {
     res.render("anime/add-preview", { title: "Confirm Add", anime: animeData, error: null });
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", requireAdmin, async (req, res, next) => {
     const anilistId = toNullableInt(req.body.anilistId);
 
     if (anilistId === null) {
@@ -217,7 +218,7 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-router.get("/:id/edit", async (req, res, next) => {
+router.get("/:id/edit", requireAdmin, async (req, res, next) => {
     if (!ID_PATTERN.test(req.params.id)) {
         return renderNotFound(res, "anime/edit");
     }
@@ -233,7 +234,7 @@ router.get("/:id/edit", async (req, res, next) => {
     }
 });
 
-router.post("/:id/edit", async (req, res, next) => {
+router.post("/:id/edit", requireAdmin, async (req, res, next) => {
     if (!ID_PATTERN.test(req.params.id)) {
         return renderNotFound(res, "anime/edit");
     }

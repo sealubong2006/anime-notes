@@ -30,7 +30,14 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="/anime">Browse</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/anime/add">Add Anime</a></li>
+                    <% if (typeof isAdmin !== "undefined" && isAdmin) { %>
+                        <li class="nav-item"><a class="nav-link" href="/anime/add">Add Anime</a></li>
+                        <li class="nav-item">
+                            <form method="POST" action="/logout" class="d-inline">
+                                <button type="submit" class="nav-link btn btn-link p-0 border-0">Logout</button>
+                            </form>
+                        </li>
+                    <% } %>
                 </ul>
             </div>
         </div>
